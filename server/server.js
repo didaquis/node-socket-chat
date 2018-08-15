@@ -14,7 +14,7 @@ const port = process.env.PORT || 3000;
 app.use(express.static(publicPath));
 
 module.exports.io = socketIO(server);
-require('./sockets/socket');
+require('./sockets/socket-server');
 
 server.listen(port, (err) => {
 	if (err) {

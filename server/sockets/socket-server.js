@@ -11,11 +11,10 @@ io.on('connection', (client) => {
 	client.on('disconnect', () => {
 		let disconnnectedPerson = users.deletePerson(client.id);
 		if(disconnnectedPerson) {
-			client.broadcast.emit('messageFromServer', { user: 'Administrator', message: `${disconnnectedPerson.name} has been disconnected.` });
-			client.broadcast.emit('messageFromServer', { user: 'Administrator', message: `Users on chat: ${users.getPeople()}.` });
+			client.broadcast.emit('messageFromServer', { message: `${disconnnectedPerson.name} has been disconnected.` });
+			client.broadcast.emit('messageFromServer', { message: `Users on chat: ${users.getNameOfPersonsConnected().join(', ')}.` });
 		}
 	});
-
 
 	client.on('enterToChat', (data, cb) => {
 		if (!data.name || data.name === '') {
@@ -25,12 +24,10 @@ io.on('connection', (client) => {
 			});
 		}
 
-		let people = users.addPerson(client.id, data.name);
+		users.addPerson(client.id, data.name);
 
-		client.broadcast.emit('messageFromServer', { user: 'Administrator', message: `${users.getPerson(client.id).name} has connected.` });
-		client.broadcast.emit('messageFromServer', { user: 'Administrator', message: `Users on chat: ${users.getPeople()}.` });
-
-		cb(people);
+		client.broadcast.emit('messageFromServer', { message: `${users.getPerson(client.id).name} has connected.` });
+		client.broadcast.emit('messageFromServer', { message: `Users on chat: ${users.getNameOfPersonsConnected().join(', ')}.` });
 	});
 
 	// Escuchando al frontend (cliente)
@@ -38,7 +35,7 @@ io.on('connection', (client) => {
 		let person = users.getPerson(client.id);
 
 		if (person.name && data.message) {
-			client.broadcast.emit('messageFromServer', { user:person.name, message: data.message } );
+			client.broadcast.emit('messageFromUser', { user:person.name, message: data.message } );
 		}
 	});
 

@@ -13,11 +13,15 @@ class Users {
      * @param {string} name Name of user
      */
 	addPerson(id, name) {
+		if(!id || !name) {
+			throw new Error('Data is required');
+		}
+
 		let person = { id, name };
 
 		this.people.push(person);
 
-		return this.people;
+		return person;
 	}
 
 	/**
@@ -41,6 +45,19 @@ class Users {
 		return this.people;
 	}
 
+
+	/**
+	 * Get name of all persons connected
+	 * @return {Array.<Object>} Array of objects with name of persons
+	 */
+	getNameOfPersonsConnected() {
+		let names = [];
+		this.people.forEach( p => {
+			names.push(p['name']);
+		});
+		return names;
+	}
+
 	/**
 	 * Get all persons by room
 	 * @param {string} room Id of room
@@ -51,7 +68,7 @@ class Users {
 	}
 
 	/**
-	 * Delete a person from people list
+	 * Delete a person from list of connected users
 	 * @param  {string} id Id of user
 	 * @return {object}    Object with deleted user data
 	 */

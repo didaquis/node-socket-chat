@@ -29,11 +29,6 @@ io.on('connection', (client) => {
 
 		client.broadcast.to(data.room).emit('messageFromServer', { message: `${users.getPerson(client.id).name} has connected.`, timestamp: timeStamp() });
 		client.broadcast.to(data.room).emit('messageFromServer', { message: `Users on this chat: ${users.getNameOfPersonsConnectedByRoom(data.room).join(', ')}.`, timestamp: timeStamp() });
-
-
-		// debug:
-		// client.broadcast.emit('messageFromServer', { message: users.getPeople(), timestamp: timeStamp() });
-		// client.broadcast.to(data.room).emit('messageFromServer', { message: users.getPeopleByRoom(data.room), timestamp: timeStamp() });
 	});
 
 	// Escuchando al frontend (cliente). Mensajes públicos de un usuario a todos los demás usuarios

@@ -7,7 +7,6 @@ const users = new Users();
 
 // Crear una conexión con un cliente
 io.on('connection', (client) => {
-
 	client.on('disconnect', () => {
 		let disconnnectedPerson = users.deletePerson(client.id);
 		if(disconnnectedPerson) {
@@ -17,25 +16,40 @@ io.on('connection', (client) => {
 	});
 
 	client.on('enterToChat', (data, cb) => {
-		if (!data.name || data.name === '') {
+		if (!data.name || data.name === '' || !data.room || data.room === '') {
 			return cb({
 				error: true,
-				message: 'Name is required'
+				message: 'Name and room chat are required'
 			});
 		}
 
-		users.addPerson(client.id, data.name);
+		client.join(data.room); // Unimos un usuario a una sala
+
+		users.addPerson(client.id, data.name, data.room);
 
 		client.broadcast.emit('messageFromServer', { message: `${users.getPerson(client.id).name} has connected.`, timestamp: timeStamp() });
 		client.broadcast.emit('messageFromServer', { message: `Users on chat: ${users.getNameOfPersonsConnected().join(', ')}.`, timestamp: timeStamp() });
+
+
+		// debug:
+		client.broadcast.emit('messageFromServer', { message: users.getPeople(), timestamp: timeStamp() });
 	});
 
-	// Escuchando al frontend (cliente)
+	// Escuchando al frontend (cliente). Mensajes públicos de un usuario a todos los demás usuarios
 	client.on('messageFromClient', (data) =>{
 		let person = users.getPerson(client.id);
 
 		if (person.name && data.message) {
 			client.broadcast.emit('messageFromUser', { user:person.name, message: data.message, timestamp: timeStamp() } );
+		}
+	});
+
+	// Mensajes privados de un usuario a otro usuario en particular
+	client.on('privateMessageFromClient', (data) => {
+		let person = users.getPerson(client.id);
+
+		if (person.name && data.message && data.toUser) {
+			client.broadcast.to(data.toUser).emit('privateMessageFromUser', { user:person.name, message: data.message, timestamp: timeStamp() } );
 		}
 	});
 

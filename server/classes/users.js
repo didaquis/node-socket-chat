@@ -12,12 +12,12 @@ class Users {
      * @param {string} id 	Id of user
      * @param {string} name Name of user
      */
-	addPerson(id, name) {
-		if(!id || !name) {
+	addPerson(id, name, room) {
+		if(!id || !name | !room) {
 			throw new Error('Data is required');
 		}
 
-		let person = { id, name };
+		let person = { id, name, room };
 
 		this.people.push(person);
 

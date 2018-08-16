@@ -8,10 +8,10 @@ const users = new Users();
 // Crear una conexión con un cliente
 io.on('connection', (client) => {
 	client.on('disconnect', () => {
-		let disconnnectedPerson = users.deletePerson(client.id);
-		if(disconnnectedPerson) {
-			client.broadcast.emit('messageFromServer', { message: `${disconnnectedPerson.name} has been disconnected.`, timestamp: timeStamp() });
-			client.broadcast.emit('messageFromServer', { message: `Users on chat: ${users.getNameOfPersonsConnected().join(', ')}.`, timestamp: timeStamp() });
+		let disconnectedPerson = users.deletePerson(client.id);
+		if(disconnectedPerson) {
+			client.broadcast.to(disconnectedPerson.room).emit('messageFromServer', { message: `${disconnectedPerson.name} has been disconnected.`, timestamp: timeStamp() });
+			client.broadcast.to(disconnectedPerson.room).emit('messageFromServer', { message: `Users on chat: ${users.getNameOfPersonsConnectedByRoom(disconnectedPerson.room).join(', ')}.`, timestamp: timeStamp() });
 		}
 	});
 
@@ -27,12 +27,13 @@ io.on('connection', (client) => {
 
 		users.addPerson(client.id, data.name, data.room);
 
-		client.broadcast.emit('messageFromServer', { message: `${users.getPerson(client.id).name} has connected.`, timestamp: timeStamp() });
-		client.broadcast.emit('messageFromServer', { message: `Users on chat: ${users.getNameOfPersonsConnected().join(', ')}.`, timestamp: timeStamp() });
+		client.broadcast.to(data.room).emit('messageFromServer', { message: `${users.getPerson(client.id).name} has connected.`, timestamp: timeStamp() });
+		client.broadcast.to(data.room).emit('messageFromServer', { message: `Users on this chat: ${users.getNameOfPersonsConnectedByRoom(data.room).join(', ')}.`, timestamp: timeStamp() });
 
 
 		// debug:
-		client.broadcast.emit('messageFromServer', { message: users.getPeople(), timestamp: timeStamp() });
+		// client.broadcast.emit('messageFromServer', { message: users.getPeople(), timestamp: timeStamp() });
+		// client.broadcast.to(data.room).emit('messageFromServer', { message: users.getPeopleByRoom(data.room), timestamp: timeStamp() });
 	});
 
 	// Escuchando al frontend (cliente). Mensajes públicos de un usuario a todos los demás usuarios
@@ -40,7 +41,7 @@ io.on('connection', (client) => {
 		let person = users.getPerson(client.id);
 
 		if (person.name && data.message) {
-			client.broadcast.emit('messageFromUser', { user:person.name, message: data.message, timestamp: timeStamp() } );
+			client.broadcast.to(person.room).emit('messageFromUser', { user:person.name, message: data.message, timestamp: timeStamp() } );
 		}
 	});
 

@@ -64,7 +64,26 @@ class Users {
 	 * @return {Array.<Object>} Array of objects with data of persons
 	 */
 	getPeopleByRoom(room) {
-		// ...
+		let names = this.people.filter( p => {
+			return p.room === room;
+		});
+		return names || [];
+	}
+
+
+	/**
+	 * Get name of all persons connected by room
+	 * @param {string} room Id of room
+	 * @return {Array.<Object>} Array of objects with data of persons
+	 */
+	getNameOfPersonsConnectedByRoom(room) {
+		let names = [];
+		this.people.forEach( p => {
+			if (p['room'] === room) {
+				names.push(p['name']);
+			}
+		});
+		return names;
 	}
 
 	/**

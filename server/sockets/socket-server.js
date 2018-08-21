@@ -1,6 +1,6 @@
 const { io } = require('../server');
 
-const timeStamp = require('../utils/utils');
+const { timeStamp, sortArrayOfObjectsByValueOfProperty } = require('../utils/utils');
 
 const { Users } = require('../classes/users');
 const users = new Users();
@@ -26,6 +26,7 @@ io.on('connection', (client) => {
 		client.join(data.room); // Unimos el usuario a una sala
 		users.addPerson(client.id, data.name, data.room);
 		let allUsersOnRoom = users.getPeopleByRoom(data.room);
+		let allUsersOnRoomSortedByName = sortArrayOfObjectsByValueOfProperty(allUsersOnRoom, 'name');
 
 		client.broadcast.to(data.room).emit('messageFromServer', { message: `${users.getPerson(client.id).name} has connected.`, timestamp: timeStamp() });
 		client.broadcast.to(data.room).emit('messageFromServer', { message: `Users on this chat: ${users.getNameOfPersonsConnectedByRoom(data.room).join(', ')}.`, timestamp: timeStamp() });

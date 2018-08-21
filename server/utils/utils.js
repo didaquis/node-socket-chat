@@ -24,4 +24,20 @@ function timeStamp() {
 	return `${date} ${time}`;
 }
 
-module.exports = timeStamp;
+
+/**
+ * Sort array of objects by specific property value
+ *
+ * @example
+ * let obj = [ { id: 1, name: 'bbbb' }, { id: 2, name: 'dddd' }, { id: 3, name: 'cccc' } ];
+ * console.log( sortArrayOfObjectsByValueOfProperty(obj, 'name') ); // [ {id: 1, name: "bbbb"}, {id: 3, name: "cccc"}, {id: 2, name: "dddd"} ]
+ *
+ * @param  {Array.<Object>} obj      	An array of object
+ * @param  {string} 		property 	Property name to sort by value
+ * @return {Array.<Object>}          	Array ob ojects
+ */
+function sortArrayOfObjectsByValueOfProperty(obj, property) {
+	return obj.sort( (a, b) => a[property].localeCompare(b[property]) );
+}
+
+module.exports = { timeStamp, sortArrayOfObjectsByValueOfProperty };

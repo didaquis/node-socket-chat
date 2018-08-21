@@ -26,7 +26,7 @@ function timeStamp() {
 
 
 /**
- * Sort array of objects by specific property value
+ * Sort array of objects by value of specified property
  *
  * @example
  * let obj = [ { id: 1, name: 'bbbb' }, { id: 2, name: 'dddd' }, { id: 3, name: 'cccc' } ];

@@ -3,16 +3,16 @@ const socket = io(); // eslint-disable-line no-undef
 let params = new URLSearchParams(window.location.search);
 if (!params.has('name') || params.get('name') === '' || !params.has('room') || params.get('room') === '') {
 	window.location = 'index.html';
-	throw new Error('Name of user and chat room are required');
+	throw new Error('Data provided in URL is invalid');
 }
 
-let usernameAndRoomFromURL = {
+let dataFromURL = {
 	name: params.get('name'),
 	room: params.get('room')
 };
 
 socket.on('connect', () => {
-	socket.emit('enterToChat', usernameAndRoomFromURL, (res) => {
+	socket.emit('enterToChat', dataFromURL, (res) => {
 		if (res.error) {
 			console.error(res.message); // eslint-disable-line no-console
 		} else {

@@ -15,6 +15,8 @@ socket.on('connect', () => {
 	socket.emit('enterToChat', usernameAndRoomFromURL, (res) => {
 		if (res.error) {
 			console.error(res.message); // eslint-disable-line no-console
+		} else {
+			renderUsers(res);
 		}
 	});
 });
@@ -30,6 +32,10 @@ socket.emit('messageFromClient', { message: 'Hi! This is a message from frontend
 // Escuchar al backend (server)
 socket.on('messageFromServer', (data) => {
 	console.info('Message from server: ', data); // eslint-disable-line no-console
+});
+
+socket.on('usersOnThisChat', (data) => {
+	renderUsers(data);
 });
 
 // Escuchar al backend (server)

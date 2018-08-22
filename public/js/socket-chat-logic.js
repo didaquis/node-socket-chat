@@ -15,13 +15,18 @@ function renderUsers(users) {
 	userListConnected.innerHTML = htmlToRender;
 }
 
-function renderPublicMessage(fromUser, message, timestamp) {
+function renderPublicMessage(fromUser, message, timestamp, myOwnMessage) {
 
-	if (typeof fromUser !== 'undefined' && typeof message !== 'undefined' && typeof timestamp !== 'undefined' ) {
+	if (typeof fromUser !== 'undefined' && typeof message !== 'undefined' && typeof timestamp !== 'undefined' && typeof myOwnMessage === 'boolean') {
 		let htmlToRender = '';
 		htmlToRender += `<div class="card mb-3">`;
-		htmlToRender += `	<div class="card-header text-muted">`;
-		htmlToRender += `		<div class="row">`;
+		if (myOwnMessage) {
+			htmlToRender += `	<div class="card-header text-muted bg-dark">`;
+			htmlToRender += `		<div class="row text-white">`;
+		} else {
+			htmlToRender += `	<div class="card-header text-muted bg-light">`;
+			htmlToRender += `		<div class="row text-dark">`;
+		}
 		htmlToRender += `			<div class="col-sm-8">`;
 		htmlToRender += `				<small>Public message from: ${fromUser}</small>`;
 		htmlToRender += `			</div>`;
@@ -76,7 +81,7 @@ formNewMessage.addEventListener('submit', (e) => {
 	socket.emit('messageFromClient', { message: message }, (result) => {
 		if (result.ok) {
 			resetInputAndSetFocus(e.target.message);
-			renderPublicMessage(result.data.user, result.data.message, result.data.timestamp);
+			renderPublicMessage(result.data.user, result.data.message, result.data.timestamp, true);
 			updateScrollOfElement(chatBox);
 		} else {
 			console.error(result.error); // eslint-disable-line no-console

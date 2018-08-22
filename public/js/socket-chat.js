@@ -48,7 +48,7 @@ socket.on('usersOnThisChat', (data) => {
 
 // Escuchar al backend (server)
 socket.on('messageFromUser', (data) => {
-	renderPublicMessage(data.user, data.message, data.timestamp);
+	renderPublicMessage(data.user, data.message, data.timestamp, false);
 	const chatBox = document.querySelector('#chatBox');
 	updateScrollOfElement(chatBox);
 	//console.log('Message from user: ', data); // eslint-disable-line no-console

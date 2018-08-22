@@ -2,6 +2,7 @@
 // references
 const userListConnected = document.querySelector('#userListConnected');
 const formNewMessage = document.querySelector('#formNewMessage');
+const chatBox = document.querySelector('#chatBox');
 
 // functions
 function renderUsers(users) {
@@ -14,6 +15,39 @@ function renderUsers(users) {
 	userListConnected.innerHTML = htmlToRender;
 }
 
+function renderPublicMessage(fromUser, message, timestamp) {
+
+	if (typeof fromUser !== 'undefined' && typeof message !== 'undefined' && typeof timestamp !== 'undefined' ) {
+		let htmlToRender = '';
+		htmlToRender += `<div class="card mb-3">`;
+		htmlToRender += `	<div class="card-header text-muted">`;
+		htmlToRender += `		<div class="row">`;
+		htmlToRender += `			<div class="col-sm-8">`;
+		htmlToRender += `				<small>Public message from: ${fromUser}</small>`;
+		htmlToRender += `			</div>`;
+		htmlToRender += `			<div class="col-sm-4 text-right">`;
+		htmlToRender += `				<small>${timestamp}</small>`;
+		htmlToRender += `			</div>`;
+		htmlToRender += `		</div>`;
+		htmlToRender += `	</div>`;
+		htmlToRender += `	<div class="card-body">`;
+		htmlToRender += `		<p class="card-text">${message}</p>`;
+		htmlToRender += `	</div>`;
+		htmlToRender += `</div>`;
+
+		chatBox.innerHTML += htmlToRender;
+	}
+}
+
+
+function resetInputAndSetFocus(element) {
+	element.value = '';
+	element.focus();
+}
+
+function updateScrollOfElement(element){
+	element.scrollTop = element.scrollHeight;
+}
 
 
 // listeners
@@ -34,8 +68,24 @@ formNewMessage.addEventListener('submit', (e) => {
 	const rawMessage = e.target.message.value;
 	const message = rawMessage.trim();
 	if (message.length === 0) {
+		resetInputAndSetFocus(e.target.message);
 		return;
 	}
 
-	
+	// Enviar contenido al backend (server)
+	socket.emit('messageFromClient', { message: message }, (result) => {
+		if (result.ok) {
+			resetInputAndSetFocus(e.target.message);
+			renderPublicMessage(result.data.user, result.data.message, result.data.timestamp);
+			updateScrollOfElement(chatBox);
+		} else {
+			console.error(result.error); // eslint-disable-line no-console
+		}
+	});
+
 }, false);
+
+// socket.on('messageFromUser', (data) => {
+// 	console.log(data)
+// 	renderPublicMessage(data.user, data.message.data.timestamp);
+// });

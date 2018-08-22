@@ -27,7 +27,15 @@ socket.on('disconnect', () => {
 });
 
 // Enviar contenido al backend (server)
-socket.emit('messageFromClient', { message: 'Hi! This is a message from frontend'});
+//socket.emit('messageFromClient', { message: 'Hi! This is a message from frontend'});
+//socket.emit('messageFromClient', { message: message }, (result) => {
+// 	if (result.ok) {
+// 		console.error(result); // eslint-disable-line no-console
+// 	} else {
+// 		console.error(result.error); // eslint-disable-line no-console
+// 	}
+// });
+
 
 // Escuchar al backend (server)
 socket.on('messageFromServer', (data) => {
@@ -40,7 +48,10 @@ socket.on('usersOnThisChat', (data) => {
 
 // Escuchar al backend (server)
 socket.on('messageFromUser', (data) => {
-	console.log('Message from user: ', data); // eslint-disable-line no-console
+	renderPublicMessage(data.user, data.message, data.timestamp);
+	const chatBox = document.querySelector('#chatBox');
+	updateScrollOfElement(chatBox);
+	//console.log('Message from user: ', data); // eslint-disable-line no-console
 });
 
 socket.on('privateMessageFromUser', (data) => {

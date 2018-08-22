@@ -32,16 +32,20 @@ io.on('connection', (client) => {
 		client.broadcast.to(data.room).emit('messageFromServer', { message: `Users on this chat: ${users.getNameOfPersonsConnectedByRoom(data.room).join(', ')}.`, timestamp: timeStamp() });
 		client.broadcast.to(data.room).emit('usersOnThisChat', allUsersOnRoom);
 
-		return cb(allUsersOnRoom);
+		cb(allUsersOnRoom);
 	});
 
 	// Escuchando al frontend (cliente). Mensajes públicos de un usuario a todos los demás usuarios
-	client.on('messageFromClient', (data) =>{
+	client.on('messageFromClient', (data, cb) => {
 		let person = users.getPerson(client.id);
 
 		if (person.name && data.message) {
 			client.broadcast.to(person.room).emit('messageFromUser', { user:person.name, message: data.message, timestamp: timeStamp() } );
+			cb({ ok: true, data: { user:person.name, message: data.message, timestamp: timeStamp() } });
+		} else {
+			cb({ ok: false, error: 'Error in communication' });
 		}
+
 	});
 
 	// Mensajes privados de un usuario a otro usuario en particular

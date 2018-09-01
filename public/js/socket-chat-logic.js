@@ -19,26 +19,26 @@ function renderPublicMessage(fromUser, message, timestamp, myOwnMessage) {
 
 	if (typeof fromUser !== 'undefined' && typeof message !== 'undefined' && typeof timestamp !== 'undefined' && typeof myOwnMessage === 'boolean') {
 		let htmlToRender = '';
-		htmlToRender += `<div class="card mb-3">`;
+		htmlToRender += '<div class="card mb-3">';
 		if (myOwnMessage) {
-			htmlToRender += `	<div class="card-header text-muted bg-dark">`;
-			htmlToRender += `		<div class="row text-white">`;
+			htmlToRender += '	<div class="card-header text-muted bg-dark">';
+			htmlToRender += '		<div class="row text-white">';
 		} else {
-			htmlToRender += `	<div class="card-header text-muted bg-light">`;
-			htmlToRender += `		<div class="row text-dark">`;
+			htmlToRender += '	<div class="card-header text-muted bg-light">';
+			htmlToRender += '		<div class="row text-dark">';
 		}
-		htmlToRender += `			<div class="col-sm-8">`;
+		htmlToRender += '			<div class="col-sm-8">';
 		htmlToRender += `				<small>Public message from: ${fromUser}</small>`;
-		htmlToRender += `			</div>`;
-		htmlToRender += `			<div class="col-sm-4 text-right">`;
+		htmlToRender += '			</div>';
+		htmlToRender += '			<div class="col-sm-4 text-right">';
 		htmlToRender += `				<small>${timestamp}</small>`;
-		htmlToRender += `			</div>`;
-		htmlToRender += `		</div>`;
-		htmlToRender += `	</div>`;
-		htmlToRender += `	<div class="card-body">`;
+		htmlToRender += '			</div>';
+		htmlToRender += '		</div>';
+		htmlToRender += '	</div>';
+		htmlToRender += '	<div class="card-body">';
 		htmlToRender += `		<p class="card-text">${message}</p>`;
-		htmlToRender += `	</div>`;
-		htmlToRender += `</div>`;
+		htmlToRender += '	</div>';
+		htmlToRender += '</div>';
 
 		chatBox.innerHTML += htmlToRender;
 	}

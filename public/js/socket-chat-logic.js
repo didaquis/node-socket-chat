@@ -45,6 +45,19 @@ function renderPublicMessage(fromUser, message, timestamp, myOwnMessage) {
 }
 
 
+function renderMessageFromServer(message, timestamp) {
+
+	if (typeof message !== 'undefined' && typeof timestamp !== 'undefined') {
+		let htmlToRender = '';
+		htmlToRender += '<p class="text-muted">';
+		htmlToRender += `	<small>${timestamp} - ${message}</small>`;
+		htmlToRender += '</p>';
+
+		chatBox.innerHTML += htmlToRender;
+	}
+}
+
+
 function resetInputAndSetFocus(element) {
 	element.value = '';
 	element.focus();

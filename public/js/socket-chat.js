@@ -39,7 +39,10 @@ socket.on('disconnect', () => {
 
 // Escuchar al backend (server)
 socket.on('messageFromServer', (data) => {
-	console.info('Message from server: ', data); // eslint-disable-line no-console
+	//console.info('Message from server: ', data); // eslint-disable-line no-console
+	renderMessageFromServer(data.message, data.timestamp);
+	const chatBox = document.querySelector('#chatBox');
+	updateScrollOfElement(chatBox);
 });
 
 socket.on('usersOnThisChat', (data) => {

@@ -26,7 +26,7 @@ function timeStamp() {
 
 
 /**
- * Sort array of objects by value of specified property
+ * Sort array of objects by value of specified property. Return the same array
  *
  * @example
  * let obj = [ { id: 1, name: 'bbbb' }, { id: 2, name: 'dddd' }, { id: 3, name: 'cccc' } ];
@@ -36,8 +36,8 @@ function timeStamp() {
  * @param  {string} 		property 	Property name to sort by value
  * @return {Array.<Object>}          	Array ob ojects
  */
-function sortArrayOfObjectsByValueOfProperty(obj, property) {
-	return obj.sort( (a, b) => a[property].localeCompare(b[property]) );
+function sortArrayOfObjectsByValueOfProperty(arr, property) {
+	return arr.sort( (a, b) => a[property].localeCompare(b[property]) );
 }
 
 module.exports = { timeStamp, sortArrayOfObjectsByValueOfProperty };

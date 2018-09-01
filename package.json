@@ -1,6 +1,6 @@
 {
     "name": "learning-socket",
-    "version": "0.1.12",
+    "version": "0.2.13",
     "description": "Node.js and Socket.io chat application",
     "main": "server/server.js",
     "scripts": {

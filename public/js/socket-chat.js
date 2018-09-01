@@ -16,7 +16,7 @@ socket.on('connect', () => {
 		if (res.error) {
 			console.error(res.message); // eslint-disable-line no-console
 		} else {
-			renderUsers(res);
+			renderUsersOnUserList(res); // eslint-disable-line no-undef
 		}
 	});
 });
@@ -26,37 +26,16 @@ socket.on('disconnect', () => {
 	console.info('Connection with server through Socket.io has been finished'); // eslint-disable-line no-console
 });
 
-// Enviar contenido al backend (server)
-//socket.emit('messageFromClient', { message: 'Hi! This is a message from frontend'});
-//socket.emit('messageFromClient', { message: message }, (result) => {
-// 	if (result.ok) {
-// 		console.error(result); // eslint-disable-line no-console
-// 	} else {
-// 		console.error(result.error); // eslint-disable-line no-console
-// 	}
-// });
-
-
 // Escuchar al backend (server)
 socket.on('messageFromServer', (data) => {
-	//console.info('Message from server: ', data); // eslint-disable-line no-console
-	renderMessageFromServer(data.message, data.timestamp);
-	const chatBox = document.querySelector('#chatBox');
-	updateScrollOfElement(chatBox);
+	renderMessageFromServer(data.message, data.timestamp, updateScrollOfElement); // eslint-disable-line no-undef
 });
 
 socket.on('usersOnThisChat', (data) => {
-	renderUsers(data);
+	renderUsersOnUserList(data); // eslint-disable-line no-undef
 });
 
 // Escuchar al backend (server)
 socket.on('messageFromUser', (data) => {
-	renderPublicMessage(data.user, data.message, data.timestamp, false);
-	const chatBox = document.querySelector('#chatBox');
-	updateScrollOfElement(chatBox);
-	//console.log('Message from user: ', data); // eslint-disable-line no-console
-});
-
-socket.on('privateMessageFromUser', (data) => {
-	console.log('Private message from user: ', data); // eslint-disable-line no-console
+	renderPublicMessage(data.user, data.message, data.timestamp, false, updateScrollOfElement); // eslint-disable-line no-undef
 });

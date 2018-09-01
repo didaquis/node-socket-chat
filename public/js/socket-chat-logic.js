@@ -5,7 +5,7 @@ const formNewMessage = document.querySelector('#formNewMessage');
 const chatBox = document.querySelector('#chatBox');
 
 // functions
-function renderUsers(users) {
+function renderUsersOnUserList(users) {
 	let htmlToRender = '';
 
 	for(let i = 0; i < users.length; i++) {
@@ -15,7 +15,7 @@ function renderUsers(users) {
 	userListConnected.innerHTML = htmlToRender;
 }
 
-function renderPublicMessage(fromUser, message, timestamp, myOwnMessage) {
+function renderPublicMessage(fromUser, message, timestamp, myOwnMessage, cb) {
 
 	if (typeof fromUser !== 'undefined' && typeof message !== 'undefined' && typeof timestamp !== 'undefined' && typeof myOwnMessage === 'boolean') {
 		let htmlToRender = '';
@@ -41,11 +41,15 @@ function renderPublicMessage(fromUser, message, timestamp, myOwnMessage) {
 		htmlToRender += '</div>';
 
 		chatBox.innerHTML += htmlToRender;
+
+		if (typeof cb === 'function') {
+			cb();
+		}
 	}
 }
 
 
-function renderMessageFromServer(message, timestamp) {
+function renderMessageFromServer(message, timestamp, cb) {
 
 	if (typeof message !== 'undefined' && typeof timestamp !== 'undefined') {
 		let htmlToRender = '';
@@ -54,6 +58,10 @@ function renderMessageFromServer(message, timestamp) {
 		htmlToRender += '</p>';
 
 		chatBox.innerHTML += htmlToRender;
+
+		if (typeof cb === 'function') {
+			cb();
+		}
 	}
 }
 
@@ -63,7 +71,7 @@ function resetInputAndSetFocus(element) {
 	element.focus();
 }
 
-function updateScrollOfElement(element){
+function updateScrollOfElement(element = chatBox){
 	element.scrollTop = element.scrollHeight;
 }
 
@@ -102,8 +110,3 @@ formNewMessage.addEventListener('submit', (e) => {
 	});
 
 }, false);
-
-// socket.on('messageFromUser', (data) => {
-// 	console.log(data)
-// 	renderPublicMessage(data.user, data.message.data.timestamp);
-// });

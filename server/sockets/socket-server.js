@@ -11,7 +11,6 @@ io.on('connection', (client) => {
 		let disconnectedPerson = users.deletePerson(client.id);
 		if(disconnectedPerson) {
 			client.broadcast.to(disconnectedPerson.room).emit('messageFromServer', { message: `${disconnectedPerson.name} has been disconnected.`, timestamp: timeStamp() });
-			client.broadcast.to(disconnectedPerson.room).emit('messageFromServer', { message: `Users on chat: ${users.getNameOfPersonsConnectedByRoom(disconnectedPerson.room).join(', ')}.`, timestamp: timeStamp() });
 		}
 	});
 
@@ -26,10 +25,12 @@ io.on('connection', (client) => {
 		client.join(data.room); // Unimos el usuario a una sala
 		users.addPerson(client.id, data.name, data.room);
 		let allUsersOnRoom = users.getPeopleByRoom(data.room);
-		let allUsersOnRoomSortedByName = sortArrayOfObjectsByValueOfProperty(allUsersOnRoom, 'name');
 
 		client.broadcast.to(data.room).emit('messageFromServer', { message: `${users.getPerson(client.id).name} has connected.`, timestamp: timeStamp() });
-		client.broadcast.to(data.room).emit('messageFromServer', { message: `Users on this chat: ${users.getNameOfPersonsConnectedByRoom(data.room).join(', ')}.`, timestamp: timeStamp() });
+
+		client.broadcast.to(data.room).emit('messageFromServer', { message: `Users on chat: ${users.getNameOfPersonsConnectedByRoom(data.room).join(', ')}.`, timestamp: timeStamp() });
+
+		sortArrayOfObjectsByValueOfProperty(allUsersOnRoom, 'name');
 		client.broadcast.to(data.room).emit('usersOnThisChat', allUsersOnRoom);
 
 		cb(allUsersOnRoom);
@@ -46,15 +47,6 @@ io.on('connection', (client) => {
 			cb({ ok: false, error: 'Error in communication' });
 		}
 
-	});
-
-	// Mensajes privados de un usuario a otro usuario en particular
-	client.on('privateMessageFromClient', (data) => {
-		let person = users.getPerson(client.id);
-
-		if (person.name && data.message && data.toUser) {
-			client.broadcast.to(data.toUser).emit('privateMessageFromUser', { user:person.name, message: data.message, timestamp: timeStamp() } );
-		}
 	});
 
 });

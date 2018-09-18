@@ -1,4 +1,11 @@
 #chatBox {
-	height: 520px;
+	height: 380px;
 	overflow-x: auto;
+}
+
+@media (min-width: 576px) {
+	#chatBox {
+		height: 524px;
+		overflow-x: auto;
+	}
 }

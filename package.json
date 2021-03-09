@@ -1,6 +1,6 @@
 {
     "name": "learning-socket",
-    "version": "0.2.16",
+    "version": "0.2.17",
     "description": "Node.js and Socket.io chat application",
     "main": "server/server.js",
     "scripts": {
@@ -11,10 +11,10 @@
     "author": "Dídac García",
     "license": "ISC",
     "dependencies": {
-        "express": "^4.16.3",
-        "socket.io": "^2.1.1"
+        "express": "^4.17.1",
+        "socket.io": "^2.4.1"
     },
     "devDependencies": {
-        "nodemon": "^1.18.3"
+        "nodemon": "^1.19.4"
     }
 }
